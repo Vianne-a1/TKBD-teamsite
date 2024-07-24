@@ -81,9 +81,9 @@
             "zenji_kotodama_darkwick_chic": "assets/Zenji_Kotodama_Darkwick_Chic.png",
             "zenji_kotodama_unearthly_bohemian": "assets/Zenji_Kotodama_Unearthly_Bohemian.png"
         };
-        let iconMap = {
 
-        };
+        let iconMap = {};
+
         // Sorts the characters by name https://stackoverflow.com/questions/5467129/sort-javascript-object-by-key
         charMap = Object.keys(charMap).sort().reduce(
             (obj, key) => { 
@@ -92,6 +92,7 @@
             }, 
             {}
         );
+
         for (let iconName in iconMap){
             charMap[iconName] = iconMap[iconName];
         }
@@ -99,9 +100,11 @@
         let framePad = 36; // Padding around portrait frame
         let portraitPad = 12; // Padding around image
         let spacing = 29; // Spacing between portrait frames
-        let portraitSize = 240;
+        let portraitWidth = 168;
+        let portraitHeight = 240;
         let selectedChars = [];
-        let frameSize = portraitSize+2*portraitPad;
+        let frameWidth = portraitWidth + 2 * portraitPad;
+        let frameHeight = portraitHeight + 2 * portraitPad;
 
         // Adds clickable character buttons
         for (let charName in charMap) {
@@ -109,8 +112,8 @@
             let pimg = $("<img>");
             pimg.attr("style", "cursor: pointer;");
             pimg.attr('src', charMap[charName]); 
-            pimg.attr('width', 164);
-            pimg.attr('height', 240);
+            pimg.attr('width', portraitWidth);
+            pimg.attr('height', portraitHeight);
             pimg.click(function(){
                 console.log(charName);
                 selectedChars.push(charName);
@@ -165,8 +168,8 @@
         function makePortraits(images){
             let maxCharsPerRow = 6;
             let numRows = Math.ceil(images.length / maxCharsPerRow);
-            let totalWidth = framePad*2 + frameSize*maxCharsPerRow + spacing*(maxCharsPerRow-1);
-            let totalHeight = framePad*2 + frameSize*numRows + spacing*(numRows-1);
+            let totalWidth = framePad * 2 + frameWidth * maxCharsPerRow + spacing * (maxCharsPerRow - 1);
+            let totalHeight = framePad * 2 + frameHeight * numRows + spacing * (numRows - 1);
 
             $("#myCanvas").attr("width", totalWidth);
             $("#myCanvas").attr("height", totalHeight);
@@ -184,15 +187,15 @@
                 let row = Math.floor(i / maxCharsPerRow);
                 let col = i % maxCharsPerRow;
 
-                let leftBorder = framePad + col*(frameSize + spacing);
-                let topBorder = framePad + row*(frameSize + spacing);
+                let leftBorder = framePad + col * (frameWidth + spacing);
+                let topBorder = framePad + row * (frameHeight + spacing);
 
                 ctx.fillStyle = "#0B0923";
-                roundRect(ctx, leftBorder, topBorder, frameSize, frameSize, radius=10, fill=true);
+                roundRect(ctx, leftBorder, topBorder, frameWidth, frameHeight, radius=10, fill=true);
 
                 baseImage.src = charMap[imageName];
                 baseImage.onload = function(){
-                    ctx.drawImage(baseImage, leftBorder + portraitPad, topBorder + portraitPad, portraitSize, portraitSize);
+                    ctx.drawImage(baseImage, leftBorder + portraitPad, topBorder + portraitPad, portraitWidth, portraitHeight);
                 }
             }
         }
