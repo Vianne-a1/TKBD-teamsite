@@ -6,197 +6,207 @@
         crossorigin="anonymous"></script>
     </head>
     <body style="background-color:#2b2941;"></body>
-<canvas id="myCanvas" width="0" height="0">
-</canvas>
-</br>
-<img id="undo" src="assets/undo-24px.svg" width=128 height=128 style="cursor: pointer;"> <!-- https://material.io/resources/icons/ -->
-</br>
-<div id="portrait-selection"></div>
-<script>
-let charMap = {
-    "alan_mido_darkwick_chic": "assets/Alan_Mido_Darkwick_Chic.png",
-    "alan_mido_wrested_truth": "assets/Alan_Mido_Wrested_Truth.png",
-    "edward_hart_casual_style": "assets/Edward_Hart_Casual_Style.png",
-    "edward_hart_dark_prince": "assets/Edward_Hart_Dark_Prince.png",
-    "edward_hart_darkwick_chic": "assets/Edward_Hart_Darkwick_Chic.png",
-    "haku_kusanagi_casual_style": "assets/Haku_Kusanagi_Casual_Style.png",
-    "haku_kusanagi_darkwick_chic": "assets/Haku_Kusanagi_Darkwick_Chic.png",
-    "haku_kusanagi_ordinary_happiness": "assets/Haku_Kusanagi_Ordinary_Happiness.png",
-    "haku_kusanagi_witty_priest": "assets/Haku_Kusanagi_Witty_Priest.png",
-    "haru_sagara_casual_style": "assets/Haru_Sagara_Casual_Style.png",
-    "haru_sagara_darkwick_chic": "assets/Haru_Sagara_Darkwick_Chic.png",
-    "haru_sagara_vibrant_safari": "assets/Haru_Sagara_Vibrant_Safari.png",
-    "jin_kamurai_casual_style": "assets/Jin_Kamurai_Casual_Style.png",
-    "jin_kamurai_darkwick_chic": "assets/Jin_Kamurai_Darkwick_Chic.png",
-    "jin_kamurai_icebound_tyrant": "assets/Jin_Kamurai_Icebound_Tyrant.png",
-    "jin_kamurai_winter_melts": "assets/Jin_Kamurai_Winter_Melts.png",
-    "jiro_kirisaki_casual_style": "assets/Jiro_Kirisaki_Casual_Style.png",
-    "jiro_kirisaki_darkwick_chic": "assets/Jiro_Kirisaki_Darkwick_Chic.png",
-    "kaito_fuji_casual_style": "assets/Kaito_Fuji_Casual_Style.png",
-    "kaito_fuji_darkwick_chic": "assets/Kaito_Fuji_Darkwick_Chic.png",
-    "kaito_fuji_thrift_shop_aristocrat": "assets/Kaito_Fuji_Thrift-Shop_Aristocrat.png",
-    "leo_kurosagi_casual_style": "assets/Leo_Kurosagi_Casual_Style.png",
-    "leo_kurosagi_darkwick_chic": "assets/Leo_Kurosagi_Darkwick_Chic.png",
-    "leo_kurosagi_diabolic_influencer": "assets/Leo_Kurosagi_Diabolic_Influencer.png",
-    "leo_kurosagi_neon_night": "assets/Leo_Kurosagi_Neon_Night.png",
-    "lucas_errant_almsgiving": "assets/Lucas_Errant_Almsgiving.png",
-    "lucas_errant_casual_style": "assets/Lucas_Errant_Casual_Style.png",
-    "lucas_errant_darkwick_chic": "assets/Lucas_Errant_Darkwick_Chic.png",
-    "lucas_errant_scattered_radiance": "assets/Lucas_Errant_Scattered_Radiance.png",
-    "lyca_colt_casual_style": "assets/Lyca_Colt_Casual_Style.png",
-    "lyca_colt_darkwick_chic": "assets/Lyca_Colt_Darkwick_Chic.png",
-    "lyca_colt_wayward_wolf": "assets/Lyca_Colt_Wayward_Wolf.png",
-    "ren_shiranami_casual_style": "assets/Ren_Shiranami_Casual_Style.png",
-    "ren_shiranami_darkwick_chic": "assets/Ren_Shiranami_Darkwick_Chic.png",
-    "ren_shiranami_the_worst": "assets/Ren_Shiranami_The_Worst.png",
-    "ritsu_shinjo_amoral_attorney": "assets/Ritsu_Shinjo_Amoral_Attorney.png",
-    "ritsu_shinjo_casual_style": "assets/Ritsu_Shinjo_Casual_Style.png",
-    "ritsu_shinjo_darkwick_chic": "assets/Ritsu_Shinjo_Darkwick_Chic.png",
-    "romeo_lucci_casual_style": "assets/Romeo_Lucci_Casual_Style.png",
-    "romeo_lucci_cutthroat_opulence": "assets/Romeo_Lucci_Cutthroat_Opulence.png",
-    "romeo_lucci_darkwick_chic": "assets/Romeo_Lucci_Darkwick_Chic.png",
-    "rui_mizuki_casual_style": "assets/Rui_Mizuki_Casual_Style.png",
-    "rui_mizuki_darkwick_chic": "assets/Rui_Mizuki_Darkwick_Chic.png",
-    "rui_mizuki_shinigamis_favor": "assets/Rui_Mizuki_Shinigami%27s_Favor.png",
-    "shohei_haizono_casual_style": "assets/Shohei_Haizono_Casual_Style.png",
-    "shohei_haizono_darkwick_chic": "assets/Shohei_Haizono_Darkwick_Chic.png",
-    "shohei_haizono_delinquent_chill": "assets/Shohei_Haizono_Delinquent_Chill.png",
-    "subaru_kagami_casual_style": "assets/Subaru_Kagami_Casual_Style.png",
-    "subaru_kagami_darkwick_chic": "assets/Subaru_Kagami_Darkwick_Chic.png",
-    "subaru_kagami_hazy_spectacle": "assets/Subaru_Kagami_Hazy_Spectacle.png",
-    "taiga_hoshibami_casual_style": "assets/Taiga_Hoshibami_Casual_Style.png",
-    "taiga_hoshibami_darkwick_chic": "assets/Taiga_Hoshibami_Darkwick_Chic.png",
-    "taiga_hoshibami_notorious_visionary": "assets/Taiga_Hoshibami_Notorious_Visionary.png",
-    "tohma_ishibashi_casual_style": "assets/Tohma_Ishibashi_Casual_Style.png",
-    "tohma_ishibashi_contrived_smile": "assets/Tohma_Ishibashi_Contrived_Smile.png",
-    "tohma_ishibashi_darkwick_chic": "assets/Tohma_Ishibashi_Darkwick_Chic.png",
-    "tohma_ishibashi_perfect_mirror": "assets/Tohma_Ishibashi_Perfect_Mirror.png",
-    "towa_otonashi_casual_style": "assets/Towa_Otonashi_Casual_Style.png",
-    "towa_otonashi_cosmic_carnation": "assets/Towa_Otonashi_Cosmic_Carnation.png",
-    "towa_otonashi_darkwick_chic": "assets/Towa_Otonashi_Darkwick_Chic.png",
-    "towa_otonashi_evanescent_words": "assets/Towa_Otonashi_Evanescent_Words.png",
-    "yuri_isami_casual_style": "assets/Yuri_Isami_Casual_Style.png",
-    "yuri_isami_darkwick_chic": "assets/Yuri_Isami_Darkwick_Chic.png",
-    "zenji_kotodama_casual_style": "assets/Zenji_Kotodama_Casual_Style.png",
-    "zenji_kotodama_darkwick_chic": "assets/Zenji_Kotodama_Darkwick_Chic.png",
-    "zenji_kotodama_unearthly_bohemian": "assets/Zenji_Kotodama_Unearthly_Bohemian.png",
-    "alan_mido_casual_style": "assets/Alan_Mido_Casual_Style.png"
-};
-    let iconMap = {
-        "malemc": "assets/UI_AvatarIcon_PlayerBoy.png",
-        "femalemc": "assets/UI_AvatarIcon_PlayerGirl.png",
-        "fillslot": "assets/abstract-user-flat-3-colored.svg",
-        "anemo": 'assets/anemo.png', 
-        "cryo": 'assets/cryo.png',
-        "electro": 'assets/electro.png',
-        "geo": 'assets/geo.png',
-        "hydro": 'assets/hydro.png',
-        "pyro": 'assets/pyro.png',
-        "dendro": 'assets/dendro.png'
-    };
-    // Sorts the characters by name https://stackoverflow.com/questions/5467129/sort-javascript-object-by-key
-    charMap = Object.keys(charMap).sort().reduce(
-        (obj, key) => { 
-            obj[key] = charMap[key]; 
-            return obj;
-        }, 
-        {}
-    );
-    for (let iconName in iconMap){
-        charMap[iconName] = iconMap[iconName];
-    }
+    <canvas id="myCanvas" width="0" height="0"></canvas>
+    </br>
+    <img id="undo" src="assets/undo-24px.svg" width=128 height=128 style="cursor: pointer;"> <!-- https://material.io/resources/icons/ -->
+    </br>
+    <div id="portrait-selection"></div>
+    <script>
+        let charMap = {
+            "alan_mido_darkwick_chic": "assets/Alan_Mido_Darkwick_Chic.png",
+            "alan_mido_wrested_truth": "assets/Alan_Mido_Wrested_Truth.png",
+            "edward_hart_casual_style": "assets/Edward_Hart_Casual_Style.png",
+            "edward_hart_dark_prince": "assets/Edward_Hart_Dark_Prince.png",
+            "edward_hart_darkwick_chic": "assets/Edward_Hart_Darkwick_Chic.png",
+            "haku_kusanagi_casual_style": "assets/Haku_Kusanagi_Casual_Style.png",
+            "haku_kusanagi_darkwick_chic": "assets/Haku_Kusanagi_Darkwick_Chic.png",
+            "haku_kusanagi_ordinary_happiness": "assets/Haku_Kusanagi_Ordinary_Happiness.png",
+            "haku_kusanagi_witty_priest": "assets/Haku_Kusanagi_Witty_Priest.png",
+            "haru_sagara_casual_style": "assets/Haru_Sagara_Casual_Style.png",
+            "haru_sagara_darkwick_chic": "assets/Haru_Sagara_Darkwick_Chic.png",
+            "haru_sagara_vibrant_safari": "assets/Haru_Sagara_Vibrant_Safari.png",
+            "jin_kamurai_casual_style": "assets/Jin_Kamurai_Casual_Style.png",
+            "jin_kamurai_darkwick_chic": "assets/Jin_Kamurai_Darkwick_Chic.png",
+            "jin_kamurai_icebound_tyrant": "assets/Jin_Kamurai_Icebound_Tyrant.png",
+            "jin_kamurai_winter_melts": "assets/Jin_Kamurai_Winter_Melts.png",
+            "jiro_kirisaki_casual_style": "assets/Jiro_Kirisaki_Casual_Style.png",
+            "jiro_kirisaki_darkwick_chic": "assets/Jiro_Kirisaki_Darkwick_Chic.png",
+            "kaito_fuji_casual_style": "assets/Kaito_Fuji_Casual_Style.png",
+            "kaito_fuji_darkwick_chic": "assets/Kaito_Fuji_Darkwick_Chic.png",
+            "kaito_fuji_thrift_shop_aristocrat": "assets/Kaito_Fuji_Thrift-Shop_Aristocrat.png",
+            "leo_kurosagi_casual_style": "assets/Leo_Kurosagi_Casual_Style.png",
+            "leo_kurosagi_darkwick_chic": "assets/Leo_Kurosagi_Darkwick_Chic.png",
+            "leo_kurosagi_diabolic_influencer": "assets/Leo_Kurosagi_Diabolic_Influencer.png",
+            "leo_kurosagi_neon_night": "assets/Leo_Kurosagi_Neon_Night.png",
+            "lucas_errant_almsgiving": "assets/Lucas_Errant_Almsgiving.png",
+            "lucas_errant_casual_style": "assets/Lucas_Errant_Casual_Style.png",
+            "lucas_errant_darkwick_chic": "assets/Lucas_Errant_Darkwick_Chic.png",
+            "lucas_errant_scattered_radiance": "assets/Lucas_Errant_Scattered_Radiance.png",
+            "lyca_colt_casual_style": "assets/Lyca_Colt_Casual_Style.png",
+            "lyca_colt_darkwick_chic": "assets/Lyca_Colt_Darkwick_Chic.png",
+            "lyca_colt_wayward_wolf": "assets/Lyca_Colt_Wayward_Wolf.png",
+            "ren_shiranami_casual_style": "assets/Ren_Shiranami_Casual_Style.png",
+            "ren_shiranami_darkwick_chic": "assets/Ren_Shiranami_Darkwick_Chic.png",
+            "ren_shiranami_the_worst": "assets/Ren_Shiranami_The_Worst.png",
+            "ritsu_shinjo_amoral_attorney": "assets/Ritsu_Shinjo_Amoral_Attorney.png",
+            "ritsu_shinjo_casual_style": "assets/Ritsu_Shinjo_Casual_Style.png",
+            "ritsu_shinjo_darkwick_chic": "assets/Ritsu_Shinjo_Darkwick_Chic.png",
+            "romeo_lucci_casual_style": "assets/Romeo_Lucci_Casual_Style.png",
+            "romeo_lucci_cutthroat_opulence": "assets/Romeo_Lucci_Cutthroat_Opulence.png",
+            "romeo_lucci_darkwick_chic": "assets/Romeo_Lucci_Darkwick_Chic.png",
+            "rui_mizuki_casual_style": "assets/Rui_Mizuki_Casual_Style.png",
+            "rui_mizuki_darkwick_chic": "assets/Rui_Mizuki_Darkwick_Chic.png",
+            "rui_mizuki_shinigamis_favor": "assets/Rui_Mizuki_Shinigami%27s_Favor.png",
+            "shohei_haizono_casual_style": "assets/Shohei_Haizono_Casual_Style.png",
+            "shohei_haizono_darkwick_chic": "assets/Shohei_Haizono_Darkwick_Chic.png",
+            "shohei_haizono_delinquent_chill": "assets/Shohei_Haizono_Delinquent_Chill.png",
+            "subaru_kagami_casual_style": "assets/Subaru_Kagami_Casual_Style.png",
+            "subaru_kagami_darkwick_chic": "assets/Subaru_Kagami_Darkwick_Chic.png",
+            "subaru_kagami_hazy_spectacle": "assets/Subaru_Kagami_Hazy_Spectacle.png",
+            "taiga_hoshibami_casual_style": "assets/Taiga_Hoshibami_Casual_Style.png",
+            "taiga_hoshibami_darkwick_chic": "assets/Taiga_Hoshibami_Darkwick_Chic.png",
+            "taiga_hoshibami_notorious_visionary": "assets/Taiga_Hoshibami_Notorious_Visionary.png",
+            "tohma_ishibashi_casual_style": "assets/Tohma_Ishibashi_Casual_Style.png",
+            "tohma_ishibashi_contrived_smile": "assets/Tohma_Ishibashi_Contrived_Smile.png",
+            "tohma_ishibashi_darkwick_chic": "assets/Tohma_Ishibashi_Darkwick_Chic.png",
+            "tohma_ishibashi_perfect_mirror": "assets/Tohma_Ishibashi_Perfect_Mirror.png",
+            "towa_otonashi_casual_style": "assets/Towa_Otonashi_Casual_Style.png",
+            "towa_otonashi_cosmic_carnation": "assets/Towa_Otonashi_Cosmic_Carnation.png",
+            "towa_otonashi_darkwick_chic": "assets/Towa_Otonashi_Darkwick_Chic.png",
+            "towa_otonashi_evanescent_words": "assets/Towa_Otonashi_Evanescent_Words.png",
+            "yuri_isami_casual_style": "assets/Yuri_Isami_Casual_Style.png",
+            "yuri_isami_darkwick_chic": "assets/Yuri_Isami_Darkwick_Chic.png",
+            "zenji_kotodama_casual_style": "assets/Zenji_Kotodama_Casual_Style.png",
+            "zenji_kotodama_darkwick_chic": "assets/Zenji_Kotodama_Darkwick_Chic.png",
+            "zenji_kotodama_unearthly_bohemian": "assets/Zenji_Kotodama_Unearthly_Bohemian.png",
+            "alan_mido_casual_style": "assets/Alan_Mido_Casual_Style.png"
+        };
+        let iconMap = {
+            "malemc": "assets/UI_AvatarIcon_PlayerBoy.png",
+            "femalemc": "assets/UI_AvatarIcon_PlayerGirl.png",
+            "fillslot": "assets/abstract-user-flat-3-colored.svg",
+            "anemo": 'assets/anemo.png', 
+            "cryo": 'assets/cryo.png',
+            "electro": 'assets/electro.png',
+            "geo": 'assets/geo.png',
+            "hydro": 'assets/hydro.png',
+            "pyro": 'assets/pyro.png',
+            "dendro": 'assets/dendro.png'
+        };
+        // Sorts the characters by name https://stackoverflow.com/questions/5467129/sort-javascript-object-by-key
+        charMap = Object.keys(charMap).sort().reduce(
+            (obj, key) => { 
+                obj[key] = charMap[key]; 
+                return obj;
+            }, 
+            {}
+        );
+        for (let iconName in iconMap){
+            charMap[iconName] = iconMap[iconName];
+        }
 
-    let framePad = 36; // Padding around portrait frame
-    let portraitPad = 12; // Padding around image
-    let spacing = 29; // Spacing between portrait frames
-    let portraitSize = 256;
-    let selectedChars = [];
-    let totalHeight = 2*framePad + 2*portraitPad + portraitSize; // 146 or 
-    let frameSize = portraitSize+2*portraitPad;
+        let framePad = 36; // Padding around portrait frame
+        let portraitPad = 12; // Padding around image
+        let spacing = 29; // Spacing between portrait frames
+        let portraitSize = 256;
+        let selectedChars = [];
+        let frameSize = portraitSize+2*portraitPad;
 
-    // Adds clickable character buttons
-    for (let charName in charMap) {
-        //https://stackoverflow.com/questions/8013792/how-to-create-a-new-img-tag-with-jquery-with-the-src-and-id-from-a-javascript-o
-        let pimg = $("<img>");
-        pimg.attr("style", "cursor: pointer;");
-        pimg.attr('src', charMap[charName]); 
-        pimg.attr('width', 128);
-        pimg.attr('height', 128);
-        pimg.click(function(){
-            console.log(charName);
-            selectedChars.push(charName);
-            makePortraits(selectedChars);
+        // Adds clickable character buttons
+        for (let charName in charMap) {
+            //https://stackoverflow.com/questions/8013792/how-to-create-a-new-img-tag-with-jquery-with-the-src-and-id-from-a-javascript-o
+            let pimg = $("<img>");
+            pimg.attr("style", "cursor: pointer;");
+            pimg.attr('src', charMap[charName]); 
+            pimg.attr('width', 128);
+            pimg.attr('height', 128);
+            pimg.click(function(){
+                console.log(charName);
+                selectedChars.push(charName);
+                makePortraits(selectedChars);
+            });
+            $("#portrait-selection").append(pimg);
+        }
+
+        $("#undo").click(function(){
+            if(selectedChars.length > 0){
+                selectedChars.pop();
+                makePortraits(selectedChars);
+            }
         });
-        $("#portrait-selection").append(pimg);
-    }
 
-    $("#undo").click(function(){
-        if(selectedChars.length > 0){
-            selectedChars.pop();
-            makePortraits(selectedChars);
-        }
-    });
-
-    // https://stackoverflow.com/questions/1255512/how-to-draw-a-rounded-rectangle-on-html-canvas
-    function roundRect(ctx, x, y, width, height, radius, fill, stroke) {
-        if (typeof stroke === 'undefined') {
-            stroke = true;
-        }
-        if (typeof radius === 'undefined') {
-            radius = 5;
-        }
-        if (typeof radius === 'number') {
-            radius = {tl: radius, tr: radius, br: radius, bl: radius};
-        } else {
-            var defaultRadius = {tl: 0, tr: 0, br: 0, bl: 0};
-            for (var side in defaultRadius) {
-            radius[side] = radius[side] || defaultRadius[side];
+        // https://stackoverflow.com/questions/1255512/how-to-draw-a-rounded-rectangle-on-html-canvas
+        function roundRect(ctx, x, y, width, height, radius, fill, stroke) {
+            if (typeof stroke === 'undefined') {
+                stroke = true;
+            }
+            if (typeof radius === 'undefined') {
+                radius = 5;
+            }
+            if (typeof radius === 'number') {
+                radius = {tl: radius, tr: radius, br: radius, bl: radius};
+            } else {
+                var defaultRadius = {tl: 0, tr: 0, br: 0, bl: 0};
+                for (var side in defaultRadius) {
+                radius[side] = radius[side] || defaultRadius[side];
+                }
+            }
+            ctx.beginPath();
+            ctx.moveTo(x + radius.tl, y);
+            ctx.lineTo(x + width - radius.tr, y);
+            ctx.quadraticCurveTo(x + width, y, x + width, y + radius.tr);
+            ctx.lineTo(x + width, y + height - radius.br);
+            ctx.quadraticCurveTo(x + width, y + height, x + width - radius.br, y + height);
+            ctx.lineTo(x + radius.bl, y + height);
+            ctx.quadraticCurveTo(x, y + height, x, y + height - radius.bl);
+            ctx.lineTo(x, y + radius.tl);
+            ctx.quadraticCurveTo(x, y, x + radius.tl, y);
+            ctx.closePath();
+            if (fill) {
+                ctx.fill();
+            }
+            if (stroke) {
+                ctx.stroke();
             }
         }
-        ctx.beginPath();
-        ctx.moveTo(x + radius.tl, y);
-        ctx.lineTo(x + width - radius.tr, y);
-        ctx.quadraticCurveTo(x + width, y, x + width, y + radius.tr);
-        ctx.lineTo(x + width, y + height - radius.br);
-        ctx.quadraticCurveTo(x + width, y + height, x + width - radius.br, y + height);
-        ctx.lineTo(x + radius.bl, y + height);
-        ctx.quadraticCurveTo(x, y + height, x, y + height - radius.bl);
-        ctx.lineTo(x, y + radius.tl);
-        ctx.quadraticCurveTo(x, y, x + radius.tl, y);
-        ctx.closePath();
-        if (fill) {
-            ctx.fill();
-        }
-        if (stroke) {
-            ctx.stroke();
-        }
-    }
-    // Adds the icons to the canvas and the portrait drawings
-    function makePortraits(images){
-        let totalWidth = framePad*2 + frameSize*images.length + spacing*(images.length-1);
-        $("#myCanvas").attr("width", totalWidth);
-        $("#myCanvas").attr("height", totalHeight);
-        let c = document.getElementById("myCanvas");
-        let ctx = c.getContext("2d");
-        //https://stackoverflow.com/questions/6011378/how-to-add-image-to-canvas
-        ctx.fillStyle = "#02041C";
 
-        roundRect(ctx, 0, 0, totalWidth, totalHeight, radius=19, fill=true);
-        for(let i = 0; i < images.length; i++){
-            let baseImage = new Image();
-            imageName = images[i];
-            console.log(imageName)
-            let leftBorder = framePad + i*(frameSize+spacing)
-            ctx.fillStyle = "#0B0923";
-            roundRect(ctx, leftBorder, framePad, frameSize, portraitSize+2*portraitPad, radius=10, fill=true);
-            baseImage.src = charMap[imageName];
-            baseImage.onload = function(){
-                ctx.drawImage(baseImage, leftBorder + portraitPad, framePad + portraitPad, portraitSize, portraitSize);
+        // Adds the icons to the canvas and the portrait drawings
+        function makePortraits(images){
+            let maxCharsPerRow = 6;
+            let numRows = Math.ceil(images.length / maxCharsPerRow);
+            let totalWidth = framePad*2 + frameSize*maxCharsPerRow + spacing*(maxCharsPerRow-1);
+            let totalHeight = framePad*2 + frameSize*numRows + spacing*(numRows-1);
+
+            $("#myCanvas").attr("width", totalWidth);
+            $("#myCanvas").attr("height", totalHeight);
+            let c = document.getElementById("myCanvas");
+            let ctx = c.getContext("2d");
+            ctx.fillStyle = "#02041C";
+
+            roundRect(ctx, 0, 0, totalWidth, totalHeight, radius=19, fill=true);
+
+            for(let i = 0; i < images.length; i++){
+                let baseImage = new Image();
+                let imageName = images[i];
+                console.log(imageName);
+
+                let row = Math.floor(i / maxCharsPerRow);
+                let col = i % maxCharsPerRow;
+
+                let leftBorder = framePad + col*(frameSize + spacing);
+                let topBorder = framePad + row*(frameSize + spacing);
+
+                ctx.fillStyle = "#0B0923";
+                roundRect(ctx, leftBorder, topBorder, frameSize, frameSize, radius=10, fill=true);
+
+                baseImage.src = charMap[imageName];
+                baseImage.onload = function(){
+                    ctx.drawImage(baseImage, leftBorder + portraitPad, topBorder + portraitPad, portraitSize, portraitSize);
+                }
             }
         }
-    }
-    makePortraits([]);
 
-</script>
+        makePortraits([]);
+
+    </script>
 </html>
-
