@@ -44,3 +44,5 @@ New Mexico
 New Hampshire 
 Georgia
 Colorado
+Indiana
+Minnesota
